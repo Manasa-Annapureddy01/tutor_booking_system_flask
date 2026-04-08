@@ -1,0 +1,12 @@
+nav{
+    border: 2px solid black;
+    height: 75px;
+    background-color: blue;
+    width: 100%;
+}
+
+nav h1{
+    color: white;
+    text-align: center;
+
+}

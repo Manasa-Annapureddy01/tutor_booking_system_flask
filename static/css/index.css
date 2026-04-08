@@ -1,0 +1,194 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+#nav{
+    /* border: 2px solid black; */
+    width: 100%;
+    height: 60px;
+    position: fixed;
+    background-color: blue;
+}
+
+#sub-nav{
+    /* border: 2px solid blue; */
+    width: 70%;
+    height: inherit;
+    margin: auto;
+    margin-top: -57px;
+}
+
+#nav h1{
+    margin-left: 45px;
+    color: white;
+}
+
+.list-inline{
+    display: flex;
+    justify-content: center;
+    gap: 225px;
+    /* color: white; */
+}
+
+.list-inline-item{
+    font-size: 18px;
+   
+    
+}
+
+/* .list-inline-item{
+    text-decoration: none;
+    color: white !important;
+} */
+
+.rounded-circle{
+    margin-left: 1400px;
+    margin-top: -80px;
+   
+
+} 
+
+#content{
+    border: 2px solid black;
+    /* margin-top: 0px; */
+    width: 100%;
+    height: 650px;
+   
+}
+
+#content h1{
+    margin-top: -355px;
+    margin-left: 450px;
+    color: blanchedalmond;
+}
+
+#content h2{
+    color: blanchedalmond;
+    margin-left: 370px;
+}
+
+#div1{
+    /* border: 2px solid black; */
+    width: 70%;
+    margin: auto;
+    height: 300px;
+    margin-top: 70px;
+    display: flex;
+}
+
+#div1 #left{
+    /* border: 2px solid blue; */
+    height: inherit;
+    flex: 1;
+    
+}
+
+#div1 #left img{
+     width: 150px;
+    height: 150px;
+    border-radius: 50%; 
+    object-fit: cover; 
+    margin-left: 180px;
+  
+}
+
+#div1 #left h1{
+    font-size: 30px;
+    margin-left: 45px;
+
+}
+
+#div1 #left h2{
+    font-size: 15px;
+    margin-left: 20px;
+    /* color: red; */
+
+
+}
+
+
+#div1 #right{
+    /* border: 2px solid red; */
+    height: inherit;
+    flex: 1;
+}
+
+#div1 #right img{
+
+    width: 150px;
+    height: 150px;
+    border-radius: 50%; 
+    /* object-fit: cover;  */
+    margin-left: 200px;
+
+}
+
+#div1 #right h1{
+    font-size: 30px;
+    margin-left: 120px;
+}
+
+#div1 #right h2{
+    font-size: 15px ;
+    margin-left: 40px;
+}
+
+#div2{
+    /* border: 2px solid black; */
+    width: 70%;
+    margin: auto;
+    margin-top: 20px;
+    height: 45px;
+}
+
+h1{
+    margin-left: 210px;
+    
+}
+
+#carouselExample {
+    width: 40%;
+    margin: auto;  
+    margin-top: 35px;
+}
+
+
+#carouselExample .carousel-item img 
+{
+    height: 250px;       
+   
+
+    
+}
+
+#div3{
+    border: 2px solid black;
+    height: 400px;
+    width: 100%;
+    margin-top: 80px;
+    background-color: black;
+    display: flex;
+}
+
+#div3 #aside1{
+    flex: 1;
+    border: 2px solid white;
+}
+
+#div3 #aside2{
+    flex: 1;
+     border: 2px solid white;
+}
+
+#div3 #aside3{
+    flex: 1;
+     border: 2px solid white;
+}
+
+/* #div3 #aside4{
+    flex: 1;
+     border: 2px solid white;
+} */
+

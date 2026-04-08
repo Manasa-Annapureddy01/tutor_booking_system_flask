@@ -2,31 +2,68 @@
 
 {% block content %}
 
-<h2>Admin Dashboard 🛠️</h2>
+<main style="margin-top: 80px;">
 
-<p>Welcome, {{ session['name'] }} 👋</p>
+<h2 style="text-align: center;">Admin Dashboard 🛠️</h2>
+<p style="text-align: center;">Welcome, {{ session['name'] }} 👋</p>
 
-<hr>
+<div class="container mt-5">
+    <div class="row">
 
-<h3>👥 User Management</h3>
-<ul>
-    <li><a href="/admin/users">View All Users</a></li>
-    <li><a href="/admin/tutors">Approve Tutors</a></li>
-</ul>
+        <!-- 👥 User Management -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow h-100 p-3 text-center">
+                <div class="card-body">
+                    <h5 class="card-title">👥 User Management</h5>
+                    <p class="card-text">Manage all users and approve tutors.</p>
 
-<hr>
+                    <a href="/admin/users" class="btn btn-primary m-1">
+                        View Users
+                    </a>
 
-<h3>📊 System Monitoring</h3>
-<ul>
-    <li><a href="/all-slots">View All Available Slots</a></li>
-    <li><a href="/my-bookings">View Bookings</a></li>
-</ul>
+                    <a href="/admin/tutors" class="btn btn-warning m-1">
+                        Approve Tutors
+                    </a>
+                </div>
+            </div>
+        </div>
 
-<hr>
+        <!-- 📊 System Monitoring -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow h-100 p-3 text-center">
+                <div class="card-body">
+                    <h5 class="card-title">📊 System Monitoring</h5>
+                    <p class="card-text">Track slots and bookings.</p>
 
-<h3>⚙️ Account</h3>
-<ul>
-    <li><a href="/logout">Logout</a></li>
-</ul>
+                    <a href="/all-slots" class="btn btn-success m-1">
+                        View Slots
+                    </a>
+
+                    <a href="/my-bookings" class="btn btn-info m-1">
+                        View Bookings
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- ⚙️ Account -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow h-100 p-3 text-center">
+                <div class="card-body">
+                    <h5 class="card-title">⚙️ Account</h5>
+                    <p class="card-text">Manage your account settings.</p>
+
+                    <a href="/logout" class="btn btn-danger">
+                        Logout
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+</main>
+
 
 {% endblock %}

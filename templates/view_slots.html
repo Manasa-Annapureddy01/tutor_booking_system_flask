@@ -1,40 +1,51 @@
-<!DOCTYPE html>
 {% extends 'base.html' %}
 
-{% block title %}Login{% endblock %}
+{% block title %}My Slots{% endblock %}
 
 {% block content %}
-<html>
-<head>
-    <title>My Slots</title>
-</head>
-<body>
 
-    <h2>My Slots</h2>
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 70vh;">
 
-    <table border="1">
-        <tr>
-            <th>Date</th>
-            <th>Time</th>
-            <th>Status</th>
-        </tr>
+    <div class="col-md-8">
+        
+        <h2 class="text-center mb-4">📅 Available Slots</h2>
 
-        {% for slot in slots %}
-        <tr>
-            <td>{{ slot['date'] }}</td>
-            <td>{{ slot['time'] }}</td>
-            <td>
-                {% if slot['is_booked'] == 0 %}
-                    Available
-                {% else %}
-                    Booked
-                {% endif %}
-            </td>
-        </tr>
-        {% endfor %}
-    </table>
+        <div class="card shadow">
+            <div class="card-body">
 
-</body>
-</html>
+                <table class="table table-bordered text-center align-middle">
+
+                    <thead class="table-dark">
+                        <tr>
+                            <th>📅 Date</th>
+                            <th>⏰ Time</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for slot in slots %}
+                        <tr>
+                            <td>{{ slot['date'] }}</td>
+                            <td>{{ slot['time'] }}</td>
+                            <td>
+                                {% if slot['is_booked'] == 0 %}
+                                    <span class="badge bg-success">Available</span>
+                                {% else %}
+                                    <span class="badge bg-danger">Booked</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+
+                </table>
+
+            </div>
+        </div>
+
+    </div>
+
+</div>
 
 {% endblock %}

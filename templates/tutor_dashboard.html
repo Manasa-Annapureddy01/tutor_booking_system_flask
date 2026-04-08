@@ -2,11 +2,43 @@
 
 {% block content %}
 
-<h2>Tutor Dashboard 👨‍🏫</h2>
+<main style="margin-top: 80px;">
 
-<ul>
-    <li><a href="/add-slot">Add Slot</a></li>
-    <li><a href="/my-slots">My Slots</a></li>
-</ul>
+<h2 style="text-align: center;">Tutor Dashboard 👨‍🏫</h2>
+ <p style="text-align: center;">Welcome, {{ session['name'] }} 👋</p>
+
+<div class="container mt-5">
+    <div class="row justify-content-center text-center">
+
+        <!-- Add Slot Card -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow h-100 p-4">
+                <div class="card-body">
+                    <h5 class="card-title">➕ Add Slot</h5>
+                    <p class="card-text">
+                        Create new available time slots for students to book sessions.
+                    </p>
+                    <a href="/add-slot" class="btn btn-primary">Add Slot</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- My Slots Card -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow h-100 p-4">
+                <div class="card-body">
+                    <h5 class="card-title">📅 My Slots</h5>
+                    <p class="card-text">
+                        View and manage all your created time slots easily.
+                    </p>
+                    <a href="/my-slots" class="btn btn-success">View Slots</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+</main>
 
 {% endblock %}

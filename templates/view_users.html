@@ -2,25 +2,90 @@
 
 {% block content %}
 
-<h2>All Users 👥</h2>
 
-<table border="1">
-    <tr>
-        <th>Name</th>
-        <th>Email</th>
-        <th>Role</th>
-        <th>Approved</th>
-    </tr>
+<div class="container mt-5">
 
-    {% for user in users %}
-    <tr>
-        <td>{{ user.name }}</td>
-        <td>{{ user.email }}</td>
-        <td>{{ user.role }}</td>
-        <td>{{ user.is_approved }}</td>
-    </tr>
-    {% endfor %}
+    <h2 class="text-center mb-4">All Users 👥</h2>
 
-</table>
+    <!-- 👨‍🏫 Tutors Table -->
+    <div class="card shadow mb-5">
+        <div class="card-body">
+            <h4 class="mb-3 text-primary">Tutors</h4>
+
+            <table class="table table-bordered table-hover text-center">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for user in users if user.role == 'tutor' %}
+                    <tr>
+                        <!-- <td>{{ user.name }}</td>
+                        <td>{{ user.email }}</td> -->
+                        <td>
+    <a href="/user/{{ user.id }}" class="text-decoration-none fw-bold">
+        {{ user.name }}
+    </a>
+</td>
+<td>
+    <a href="/user/{{ user.id }}" class="text-decoration-none fw-bold">
+        {{ user.email }}
+    </a>
+</td>
+                        <td>
+                            {% if user.is_approved == 1 %}
+                                <span class="badge bg-success">Approved</span>
+                            {% else %}
+                                <span class="badge bg-warning text-dark">Pending</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- 🎓 Students Table -->
+    <div class="card shadow mb-5">
+        <div class="card-body">
+            <h4 class="mb-3 text-success">Students</h4>
+
+            <table class="table table-bordered table-hover text-center">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for user in users if user.role == 'student' %}
+                    <tr>
+                        <!-- <td>{{ user.name }}</td>
+                        <td>{{ user.email }}</td> -->
+                                           <td>
+    <a href="/user/{{ user.id }}" class="text-decoration-none fw-bold">
+        {{ user.name }}
+    </a>
+</td>
+<td>
+    <a href="/user/{{ user.id }}" class="text-decoration-none fw-bold">
+        {{ user.email }}
+    </a>
+</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
 
 {% endblock %}
+

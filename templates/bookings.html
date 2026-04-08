@@ -1,42 +1,68 @@
-<!DOCTYPE html>
 {% extends 'base.html' %}
 
-{% block title %}Login{% endblock %}
+{% block title %}My Bookings{% endblock %}
 
 {% block content %}
-<html>
-<head>
-    
-    <title>My Bookings</title>
-</head>
-<body>
 
-    <h2>My Bookings</h2>
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 70vh;">
 
-    <table border="1">
-        <tr>
-            <th>Tutor ID</th>
-            <th>Date</th>
-            <th>Time</th>
-            <th>Status</th>
-            <th>Action</th>
-        </tr>
+    <div class="col-md-9">
 
-        {% for booking in bookings %}
-        <tr>
-            <td>{{ booking['tutor_id'] }}</td>
-            <td>{{ booking['date'] }}</td>
-            <td>{{ booking['time'] }}</td>
-            <td>{{ booking['status'] }}</td>
-            <td>
-                <a href="/cancel/{{ booking['id'] }}" onclick="return confirm('Are you sure?')">Cancel</a>
-                
-            </td>
-        </tr>
-        {% endfor %}
-    </table>
+        <h2 class="text-center mb-4">📖 My Bookings</h2>
 
-</body>
-</html>
+        <div class="card shadow">
+            <div class="card-body">
+
+                <table class="table table-bordered table-hover text-center align-middle">
+
+                    <thead class="table-dark">
+                        <tr>
+                            <th>👨‍🏫 Tutor ID</th>
+                            <th>📅 Date</th>
+                            <th>⏰ Time</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for booking in bookings %}
+                        <tr>
+                            <td>{{ booking['tutor_id'] }}</td>
+                            <td>{{ booking['date'] }}</td>
+                            <td>{{ booking['time'] }}</td>
+
+                            <td>
+                                {% if booking['status'] == 'booked' %}
+                                    <span class="badge bg-success">Booked</span>
+                                {% elif booking['status'] == 'cancelled' %}
+                                    <span class="badge bg-danger">Cancelled</span>
+                                {% else %}
+                                    <span class="badge bg-warning text-dark">
+                                        {{ booking['status'] }}
+                                    </span>
+                                {% endif %}
+                            </td>
+
+                            <td>
+                                <a href="/cancel/{{ booking['id'] }}"
+                                   class="btn btn-danger btn-sm"
+                                   onclick="return confirm('Are you sure you want to cancel this booking?')">
+                                    Cancel
+                                </a>
+                            </td>
+
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+
+                </table>
+
+            </div>
+        </div>
+
+    </div>
+
+</div>
 
 {% endblock %}

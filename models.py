@@ -9,17 +9,6 @@ def init_db():
     conn = get_db_connection()
     cursor = conn.cursor()
 
-
-    # Create default admin
-    cursor.execute("SELECT * FROM users WHERE role = 'admin'")
-    admin = cursor.fetchone()
-
-    if admin is None:
-        cursor.execute('''
-        INSERT INTO users (name, email, password, role)
-        VALUES (?, ?, ?, ?)
-    ''', ('Admin', 'admin@gmail.com', 'admin123', 'admin'))
-
     # Users table
     cursor.execute('''
     CREATE TABLE IF NOT EXISTS users (
@@ -29,6 +18,35 @@ def init_db():
         password TEXT NOT NULL,
         role TEXT NOT NULL,
         is_approved INTEGER DEFAULT 0
+    )
+    ''')
+
+    # Create default admin
+    cursor.execute("SELECT * FROM users WHERE role = 'admin'")
+    admin = cursor.fetchone()
+
+    if admin is None:
+        cursor.execute('''
+        INSERT INTO users (name, email, password, role)
+        VALUES (?, ?, ?, ?)
+        ''', ('Admin', 'admin@gmail.com', 'admin123', 'admin'))
+
+    # Details table
+    cursor.execute('''
+    CREATE TABLE IF NOT EXISTS details (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id INTEGER,
+        name TEXT,
+        email TEXT,
+        phone TEXT,
+        qualification TEXT,
+        years INTEGER,
+        subjects TEXT,
+        mode TEXT,
+        address TEXT,
+        file TEXT,
+        skills TEXT,
+        FOREIGN KEY (user_id) REFERENCES users(id)
     )
     ''')
 

@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, session,flash
 from models import init_db, get_db_connection
 
+
 app = Flask(__name__)
 app.secret_key = 'secret123'
 
@@ -10,10 +11,17 @@ init_db()
 # Home Route
 @app.route('/')
 def home():
-    return redirect('/login')
+    return render_template('index.html')
+
+# about
+
+@app.route('/about')
+def about():
+    return render_template('about.html')
 
 
 # ✅ Register Route
+
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
@@ -32,13 +40,17 @@ def register():
             ''', (name, email, password, role))
 
             conn.commit()
+            flash("Registration successful ✅")
 
-            # ✅ Flash success message
-            flash("Registration successful! Please login ✅")
+            # ✅ Role-based redirect
+            if role == 'student':
+                return redirect('/login')   # go to login
 
-            return redirect('/login')
+            elif role == 'tutor':
+                return redirect('/form')    # go to form
 
-        except:
+        except Exception as e:
+            print("ERROR:", e)
             flash("Email already exists ❌")
             return redirect('/register')
 
@@ -47,6 +59,99 @@ def register():
 
     return render_template('register.html')
 
+
+
+# @form
+
+# @app.route('/form', methods=['GET', 'POST'])
+# def details():
+#     if request.method == 'POST':
+#         # 📥 Get form data
+#         name = request.form['name']
+#         email = request.form['email']
+#         phone = request.form['phone']
+#         qualification = request.form['qualification']
+#         years = request.form['years']
+#         subjects = request.form['subjects']
+#         mode = request.form['mode']
+#         address = request.form['address']
+#         skills = request.form['skills']
+
+        # # 📁 Handle file upload
+        # file = request.files['file']
+
+      
+        # if file and file.filename != '':
+        #     filename = secure_filename(file.filename)
+        #     file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
+        # 💾 Store in database
+        # conn = get_db_connection()
+        # cursor = conn.cursor()
+
+        # filename = None
+
+        # cursor.execute('''
+        #     INSERT INTO details 
+        #     (name, email, phone, qualification,years, subjects, mode,address, skills)
+        #     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        # ''', (name, email, phone,  qualification,years, subjects, mode, address, skills))
+
+    
+
+       
+
+    #     cursor.execute('''
+    #           INSERT INTO details 
+    #           (name, email, phone, qualification, years, subjects, mode, address, file, skills)
+    #           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    #       ''', (name, email, phone, qualification, years, subjects, mode, address, filename, skills))
+
+
+
+    #     conn.commit()
+    #     conn.close()
+
+    #     flash("Details submitted successfully ✅")
+
+    #     return redirect('/login')  # or redirect somewhere else
+
+    # return render_template('form.html')
+
+@app.route('/form', methods=['GET', 'POST'])
+def details():
+    if request.method == 'POST':
+
+        user_id = session['user_id']   # 🔥 IMPORTANT
+
+        name = request.form['name']
+        email = request.form['email']
+        phone = request.form['phone']
+        qualification = request.form['qualification']
+        years = request.form['years']
+        subjects = request.form['subjects']
+        mode = request.form['mode']
+        address = request.form['address']
+        skills = request.form['skills']
+
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
+        filename = None
+
+        cursor.execute('''
+            INSERT INTO details 
+            (user_id, name, email, phone, qualification, years, subjects, mode, address, file, skills)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ''', (user_id, name, email, phone, qualification, years, subjects, mode, address, filename, skills))
+
+        conn.commit()
+        conn.close()
+
+        flash("Details submitted successfully ✅")
+        return redirect('/login')
+
+    return render_template('form.html')
 
 # Admin/View Users dashboard
 @app.route('/admin/users')
@@ -90,6 +195,26 @@ def view_tutors():
     return render_template('approve_tutors.html', tutors=tutors)
 
 # Admin-tutors-approval
+# @app.route('/admin/approve/<int:user_id>')
+# def approve_tutor(user_id):
+#     if 'user_id' not in session:
+#         return redirect('/login')
+
+#     if session['role'] != 'admin':
+#         return "Access Denied ❌"
+
+#     conn = get_db_connection()
+#     cursor = conn.cursor()
+
+#     cursor.execute('''
+#         UPDATE users SET is_approved = 1 WHERE id = ?
+#     ''', (user_id,))
+
+#     conn.commit()
+#     conn.close()
+
+#     return redirect('/admin/tutors')
+
 @app.route('/admin/approve/<int:user_id>')
 def approve_tutor(user_id):
     if 'user_id' not in session:
@@ -101,13 +226,20 @@ def approve_tutor(user_id):
     conn = get_db_connection()
     cursor = conn.cursor()
 
-    cursor.execute('''
-        UPDATE users SET is_approved = 1 WHERE id = ?
-    ''', (user_id,))
-
+    # ✅ Approve tutor
+    cursor.execute('UPDATE users SET is_approved = 1 WHERE id = ?', (user_id,))
     conn.commit()
+
+    # ✅ GET tutor details
+    cursor.execute('SELECT email, name FROM users WHERE id = ?', (user_id,))
+    tutor = cursor.fetchone()
+
     conn.close()
 
+    # ✅ SEND EMAIL HERE
+    send_approval_email(tutor['email'], tutor['name'])
+
+    flash("Tutor approved and email sent ✅")
     return redirect('/admin/tutors')
 
 
@@ -339,6 +471,29 @@ def cancel_booking(booking_id):
     conn.close()
 
     return redirect('/my-bookings')
+
+# @ for table links
+@app.route('/user/<int:user_id>')
+def user_details(user_id):
+    if 'user_id' not in session:
+        return redirect('/login')
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    cursor.execute('''
+        SELECT users.*, details.phone, details.qualification, details.years,
+               details.subjects, details.mode, details.address, details.skills
+        FROM users
+        LEFT JOIN details ON users.email = details.email
+        WHERE users.id = ?
+    ''', (user_id,))
+
+    user = cursor.fetchone()
+
+    conn.close()
+
+    return render_template('user_details.html', user=user)
 
 
 # ✅ Logout
