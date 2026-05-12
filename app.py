@@ -62,68 +62,10 @@ def register():
 
 
 
-# @form
-
-# @app.route('/form', methods=['GET', 'POST'])
-# def details():
-#     if request.method == 'POST':
-#         # 📥 Get form data
-#         name = request.form['name']
-#         email = request.form['email']
-#         phone = request.form['phone']
-#         qualification = request.form['qualification']
-#         years = request.form['years']
-#         subjects = request.form['subjects']
-#         mode = request.form['mode']
-#         address = request.form['address']
-#         skills = request.form['skills']
-
-        # # 📁 Handle file upload
-        # file = request.files['file']
-
-      
-        # if file and file.filename != '':
-        #     filename = secure_filename(file.filename)
-        #     file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-
-        # 💾 Store in database
-        # conn = get_db_connection()
-        # cursor = conn.cursor()
-
-        # filename = None
-
-        # cursor.execute('''
-        #     INSERT INTO details 
-        #     (name, email, phone, qualification,years, subjects, mode,address, skills)
-        #     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        # ''', (name, email, phone,  qualification,years, subjects, mode, address, skills))
-
-    
-
-       
-
-    #     cursor.execute('''
-    #           INSERT INTO details 
-    #           (name, email, phone, qualification, years, subjects, mode, address, file, skills)
-    #           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    #       ''', (name, email, phone, qualification, years, subjects, mode, address, filename, skills))
-
-
-
-    #     conn.commit()
-    #     conn.close()
-
-    #     flash("Details submitted successfully ✅")
-
-    #     return redirect('/login')  # or redirect somewhere else
-
-    # return render_template('form.html')
-
 @app.route('/form', methods=['GET', 'POST'])
 def details():
-    if request.method == 'POST':
 
-        user_id = session['user_id']   # 🔥 IMPORTANT
+    if request.method == 'POST':
 
         name = request.form['name']
         email = request.form['email']
@@ -135,21 +77,32 @@ def details():
         address = request.form['address']
         skills = request.form['skills']
 
-        conn = get_db_connection()
-        cursor = conn.cursor()
+        # File Upload
+        file = request.files['file']
 
         filename = None
 
+        if file and file.filename != '':
+            filename = file.filename
+
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
         cursor.execute('''
-            INSERT INTO details 
-            (user_id, name, email, phone, qualification, years, subjects, mode, address, file, skills)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        ''', (user_id, name, email, phone, qualification, years, subjects, mode, address, filename, skills))
+            INSERT INTO details
+            (name, email, phone, qualification, years,
+             subjects, mode, address, file, skills)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ''', (
+            name, email, phone, qualification, years,
+            subjects, mode, address, filename, skills
+        ))
 
         conn.commit()
         conn.close()
 
         flash("Details submitted successfully ✅")
+
         return redirect('/login')
 
     return render_template('form.html')
@@ -264,7 +217,7 @@ def login():
         if user:
             # ✅ Tutor approval check
             if user['role'] == 'tutor' and user['is_approved'] == 0:
-                return "Waiting for Admin Approval ⏳"
+                return render_template('waiting.html')
 
             # ✅ Store session
             session['user_id'] = user['id']
